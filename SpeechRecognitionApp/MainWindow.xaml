@@ -7,7 +7,8 @@
         mc:Ignorable="d"
         Title="Speech Recognition App" Height="450" Width="800">
     <Grid>
-        <Button Name="StartButton" Content="Start Recognition" Width="200" Height="50" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,20,0,0" Click="StartButton_Click"/>
-        <TextBox Name="ResultTextBox" Width="711" Height="299" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,116,0,0" TextWrapping="Wrap" AcceptsReturn="True" IsReadOnly="True"/>
+        <Button Name="StartButton" Content="Start Recording" Width="150" Height="50" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="183,30,0,0" Click="StartButton_Click"/>
+        <Button Name="StopButton" Content="Stop Recording" Width="150" Height="50" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,30,191,0" Click="StopButton_Click" IsEnabled="False"/>
+        <TextBox Name="ResultTextBox" Width="740" Height="266" VerticalAlignment="Top" HorizontalAlignment="Center" IsReadOnly="True" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,134,0,0"/>
     </Grid>
 </Window>
