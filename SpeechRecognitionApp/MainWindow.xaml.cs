@@ -1,28 +1,74 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Vosk;
+using NAudio.Wave;
+using Newtonsoft.Json;
 
 namespace SpeechRecognitionApp
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
+        private WaveInEvent waveIn;
+        private MemoryStream memoryStream;
+        private VoskRecognizer recognizer;
+        private Model _model;
+        private bool isRecording = false;
+
         public MainWindow()
         {
             InitializeComponent();
+            _model = new Model(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\models", "vosk-model-en-us-0.22"));
+        }
+
+        private void StartButton_Click(object sender, RoutedEventArgs e)
+        {
+            StartButton.IsEnabled = false;
+            StopButton.IsEnabled = true;
+
+            memoryStream = new MemoryStream();
+            waveIn = new WaveInEvent();
+            waveIn.WaveFormat = new WaveFormat(16000, 1);
+            recognizer = new VoskRecognizer(_model, 16000.0f);
+            waveIn.DataAvailable += OnDataAvailable;
+
+            isRecording = true;
+            waveIn.StartRecording();
+
+            ResultTextBox.Text = "Recording started...\n";
+        }
+
+        private void OnDataAvailable(object sender, WaveInEventArgs e)
+        {
+            if (isRecording)
+            {
+                recognizer.AcceptWaveform(e.Buffer, e.BytesRecorded); 
+            }
+        }
+
+        private void StopButton_Click(object sender, RoutedEventArgs e)
+        {
+            StopButton.IsEnabled = false;
+            StartButton.IsEnabled = true;
+
+            if (isRecording)
+            {
+                isRecording = false;
+                waveIn.StopRecording();
+                waveIn.Dispose();
+
+                var finalResult = recognizer.FinalResult();
+                dynamic jsonResult = JsonConvert.DeserializeObject(finalResult);
+
+                if (!string.IsNullOrWhiteSpace((string)jsonResult.text))
+                {
+                    ResultTextBox.Text += $"Recognized text: {jsonResult.text}\n";
+                }
+                else
+                {
+                    ResultTextBox.Text += "No speech recognized.\n";
+                }
+            }
         }
     }
 }
