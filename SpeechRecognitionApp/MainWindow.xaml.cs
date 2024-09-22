@@ -35,14 +35,14 @@ namespace SpeechRecognitionApp
             isRecording = true;
             waveIn.StartRecording();
 
-            ResultTextBox.Text = "Recording started...\n";
+            StatusLabel.Content = "Recording started...";
         }
 
         private void OnDataAvailable(object sender, WaveInEventArgs e)
         {
             if (isRecording)
             {
-                recognizer.AcceptWaveform(e.Buffer, e.BytesRecorded); 
+                recognizer.AcceptWaveform(e.Buffer, e.BytesRecorded);
             }
         }
 
@@ -62,12 +62,13 @@ namespace SpeechRecognitionApp
 
                 if (!string.IsNullOrWhiteSpace((string)jsonResult.text))
                 {
-                    ResultTextBox.Text += $"Recognized text: {jsonResult.text}\n";
+                    ResultTextBox.Text += $"{jsonResult.text}\n";
                 }
                 else
                 {
                     ResultTextBox.Text += "No speech recognized.\n";
                 }
+                StatusLabel.Content = "Recording stopped.";
             }
         }
     }
