@@ -4,6 +4,7 @@ using System.Windows;
 using Vosk;
 using NAudio.Wave;
 using Newtonsoft.Json;
+using Microsoft.Win32;
 
 namespace SpeechRecognitionApp
 {
@@ -43,6 +44,21 @@ namespace SpeechRecognitionApp
             if (isRecording)
             {
                 recognizer.AcceptWaveform(e.Buffer, e.BytesRecorded);
+            }
+        }
+
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Filter = "Text file (*.txt)|*.txt",
+                FileName = "Recognized_speech.txt"
+            };
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                File.WriteAllText(saveFileDialog.FileName, ResultTextBox.Text);
+                MessageBox.Show("Text saved successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
