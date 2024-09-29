@@ -31,6 +31,7 @@ namespace SpeechRecognitionApp
             waveIn = new WaveInEvent();
             waveIn.WaveFormat = new WaveFormat(16000, 1);
             recognizer = new VoskRecognizer(_model, 16000.0f);
+            waveIn.BufferMilliseconds = 50;
             waveIn.DataAvailable += OnDataAvailable;
 
             isRecording = true;

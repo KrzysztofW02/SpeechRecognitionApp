@@ -11,6 +11,6 @@
         <Button Name="StartButton" Content="Start Recording" Width="150" Height="50" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="138,64,0,0" Click="StartButton_Click"/>
         <Button Name="StopButton" Content="Stop Recording" Width="150" Height="50" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,64,0,0" Click="StopButton_Click" IsEnabled="False"/>
         <Button Name="SaveButton" Content="Save to File" Click="SaveButton_Click" Width="150" Height="50" Margin="514,64,136,0" VerticalAlignment="Top"/>
-        <TextBox Name="ResultTextBox" Width="740" Height="266" VerticalAlignment="Top" HorizontalAlignment="Center" IsReadOnly="True" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,134,0,0"/>
+        <TextBox Name="ResultTextBox" Width="740" Height="266" VerticalAlignment="Top" HorizontalAlignment="Center" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,134,0,0"/>
     </Grid>
 </Window>
