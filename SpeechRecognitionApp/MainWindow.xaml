@@ -6,8 +6,36 @@
         xmlns:local="clr-namespace:SpeechRecognitionApp"
         mc:Ignorable="d"
         Title="Speech Recognition App" Height="450" Width="800">
+
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="12" ClipToBounds="True">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                            
+                            <Border x:Name="HoverOverlay" Background="Black" Opacity="0" CornerRadius="12" ClipToBounds="True" />
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="HoverOverlay" Property="Opacity" Value="0.2" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="HoverOverlay" Property="Opacity" Value="0.4" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
     <Grid Background="#FF323232">
-        <Label x:Name="StatusLabel" Content="Click 'Start' to begin recording" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" Height="30" Width="500" Foreground="White" FontFamily="HVD Comic Serif Pro" FontSize="18" />
+        <Label x:Name="StatusLabel" Content="Click 'Start' to begin recording" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" Height="34" Width="500" Foreground="White" FontFamily="HVD Comic Serif Pro" FontSize="18" />
 
         <Button Name="StartButton" Content="START RECORDING" Width="150" Height="50" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="150,64,0,0" Click="StartButton_Click" Foreground="White" FontFamily="HVD Comic Serif Pro" FontSize="12" BorderBrush="{x:Null}">
             <Button.Background>
@@ -17,13 +45,15 @@
 
         <Button Name="StopButton" Content="STOP RECORDING" Width="150" Height="50" 
         VerticalAlignment="Top" HorizontalAlignment="Left" Margin="317,64,0,0" 
-        Click="StopButton_Click" Foreground="White" FontWeight="Bold" FontFamily="HVD Comic Serif Pro" FontSize="12" BorderBrush="{x:Null}">
+        Click="StopButton_Click" Foreground="White" FontWeight="Bold" FontFamily="HVD Comic Serif Pro" FontSize="12" BorderBrush="{x:Null}" IsEnabled="False">
             <Button.Background>
                 <ImageBrush ImageSource="Assets/stopButton.png" Stretch="Fill" />
             </Button.Background>
         </Button>
 
-        <Button Name="SaveButton" Content="SAVE TO FILE" Click="SaveButton_Click" Width="150" Height="50" Margin="480,64,170,0" VerticalAlignment="Top" Foreground="White" FontFamily="HVD Comic Serif Pro" BorderBrush="{x:Null}">
+        <Button Name="SaveButton" Content="SAVE TO FILE" Width="150" Height="50" 
+        VerticalAlignment="Top" HorizontalAlignment="Left" Margin="485,64,0,0" 
+        Click="SaveButton_Click" Foreground="White" FontWeight="Bold" FontFamily="HVD Comic Serif Pro" FontSize="12" BorderBrush="{x:Null}">
             <Button.Background>
                 <ImageBrush ImageSource="Assets/saveButton.png" Stretch="Fill" />
             </Button.Background>
