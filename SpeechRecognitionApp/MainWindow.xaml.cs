@@ -5,6 +5,8 @@ using Vosk;
 using NAudio.Wave;
 using Newtonsoft.Json;
 using Microsoft.Win32;
+using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace SpeechRecognitionApp
 {
@@ -20,9 +22,12 @@ namespace SpeechRecognitionApp
         {
             InitializeComponent();
             _model = new Model(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\models", "vosk-model-en-us-0.22"));
+            this.KeyDown += new KeyEventHandler(OnButtonKeyDown);
+            this.Focusable = true;
+            this.Focus();
         }
 
-        private void StartButton_Click(object sender, RoutedEventArgs e)
+        private async void StartButton_Click(object sender, RoutedEventArgs e)
         {
             StartButton.IsEnabled = false;
             StopButton.IsEnabled = true;
@@ -38,6 +43,8 @@ namespace SpeechRecognitionApp
             waveIn.StartRecording();
 
             StatusLabel.Content = "Recording started...";
+
+            await Task.Run(() => RecognizeSpeechAsync());
         }
 
         private void OnDataAvailable(object sender, WaveInEventArgs e)
@@ -86,6 +93,32 @@ namespace SpeechRecognitionApp
                     ResultTextBox.Text += "No speech recognized.\n";
                 }
                 StatusLabel.Content = "Recording stopped.";
+            }
+        }
+
+        private void OnButtonKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.R && Keyboard.Modifiers == ModifierKeys.Control)
+            {
+                StartButton_Click(sender, e);
+            }
+
+            else if (e.Key == Key.S && Keyboard.Modifiers == ModifierKeys.Control)
+            {
+                SaveButton_Click(sender, e);
+            }
+
+            else if (e.Key == Key.E && Keyboard.Modifiers == ModifierKeys.Control)
+            {
+                StopButton_Click(sender, e);
+            }
+        }
+
+        private async Task RecognizeSpeechAsync()
+        {
+            while (isRecording)
+            {
+                await Task.Delay(50);
             }
         }
     }
