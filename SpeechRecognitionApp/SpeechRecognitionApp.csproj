@@ -143,6 +143,9 @@
   <ItemGroup>
     <Resource Include="Assets\saveButton.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\loadButton.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Vosk.0.3.38\build\Vosk.targets" Condition="Exists('..\packages\Vosk.0.3.38\build\Vosk.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

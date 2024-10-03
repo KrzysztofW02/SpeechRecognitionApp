@@ -96,6 +96,52 @@ namespace SpeechRecognitionApp
             }
         }
 
+        private async void LoadAudioButton_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Filter = "Audio files (*.wav)|*.wav",
+                Title = "Select an Audio File"
+            };
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                try
+                {
+                    using (var audioFileReader = new AudioFileReader(openFileDialog.FileName))
+                    using (var resampler = new MediaFoundationResampler(audioFileReader, new WaveFormat(16000, 1)))
+                    {
+                        resampler.ResamplerQuality = 60;
+
+                        var buffer = new byte[4096];
+                        int bytesRead;
+                        recognizer = new VoskRecognizer(_model, resampler.WaveFormat.SampleRate);
+
+                        while ((bytesRead = resampler.Read(buffer, 0, buffer.Length)) > 0)
+                        {
+                            recognizer.AcceptWaveform(buffer, bytesRead);
+                        }
+
+                        var result = recognizer.FinalResult();
+                        dynamic jsonResult = JsonConvert.DeserializeObject(result);
+
+                        if (!string.IsNullOrWhiteSpace((string)jsonResult.text))
+                        {
+                            ResultTextBox.Text += $"{jsonResult.text}\n";
+                        }
+                        else
+                        {
+                            ResultTextBox.Text += "No speech recognized from audio file.\n";
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error processing audio file: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
         private void OnButtonKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.R && Keyboard.Modifiers == ModifierKeys.Control)
